@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/home"
+            android:title="Home"
+            android:icon="@drawable/ic_baseline_home_24"/>
+        <item android:id="@+id/data"
+            android:title="Data"
+            android:icon="@drawable/ic_baseline_data_usage_24"/>
+        <item android:id="@+id/demography"
+            android:title="Demography"
+            android:icon="@drawable/ic_baseline_trending_up_24"/>
+        <item android:id="@+id/rank"
+            android:title="Ranking"
+            android:icon="@drawable/ic_ranking"/>
+        <item android:id="@+id/analysis"
+            android:title="Analysis"
+            android:icon="@drawable/ic_result"/>
+        <item android:id="@+id/about"
+            android:title="About Us"
+            android:icon="@drawable/ic_about"/>
+    </group>
+</menu>
