@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -43,6 +45,7 @@ public class home extends AppCompatActivity {
     protected String URL = "https://covserver.pythonanywhere.com/";
     PieChart pieChart,pieChart_rec,pieChart_death;
     TextView confirmtext,recovertext,activetext,deathtext,dash_date,confirmcarddatatext,recovercarddatatext,deathcarddatatext;
+    private SwipeRefreshLayout swipeContainer;
 
     public PieChart setPieProperty(PieChart m){
         m.setUsePercentValues(false);
@@ -53,11 +56,7 @@ public class home extends AppCompatActivity {
         m.getLegend().setEnabled(false);
         return m;
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+    public void DoNetworkTask(){
         final loading Loading = new loading(home.this);
         Loading.startLoading();
 
@@ -78,6 +77,14 @@ public class home extends AppCompatActivity {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
+                home.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),"Oops! Can't connect to server",Toast.LENGTH_LONG).show();
+                        Loading.dissmiss();
+                    }
+                });
+
             }
 
             @Override
@@ -144,69 +151,88 @@ public class home extends AppCompatActivity {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
+
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        final String myresponse = response.body().string();
-                        home.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    JSONArray jsonArray = new JSONArray(myresponse);
-                                    pieChart = findViewById(R.id.piechartConfirm);
-                                    pieChart_rec = findViewById(R.id.piechartrecover);
-                                    pieChart_death = findViewById(R.id.piechartDeath);
-                                    pieChart = setPieProperty(pieChart);
-                                    pieChart_rec = setPieProperty(pieChart_rec);
-                                    pieChart_death = setPieProperty(pieChart_death);
-                                    //                        pieChart.setExtraOffsets(5,10,5,5);
-                                    ArrayList<PieEntry> pieEntries = new ArrayList<>();
-                                    ArrayList<PieEntry> pieEntries_rec = new ArrayList<>();
-                                    ArrayList<PieEntry> pieEntries_death = new ArrayList<>();
-                                    for (int i = 0; i < jsonArray.length() - 1; i++) {
-                                        JSONObject json = jsonArray.getJSONObject(i);
-                                        pieEntries.add(new PieEntry(Float.parseFloat(json.getString("Total Confirmed")), json.getString("STATE/UT")));
-                                        pieEntries_rec.add(new PieEntry(Float.parseFloat(json.getString("Total Recovered")), json.getString("STATE/UT")));
-                                        pieEntries_death.add(new PieEntry(Float.parseFloat(json.getString("Total Death")), json.getString("STATE/UT")));
-                                    }
-                                    PieDataSet pieDataSet = new PieDataSet(pieEntries, "Confirmed cases in India");
-                                    PieDataSet pieDataSet_rec = new PieDataSet(pieEntries_rec, "Recovered cases in India");
-                                    PieDataSet pieDataSet_death = new PieDataSet(pieEntries_death, "Deceased cases in India");
-                                    pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-                                    pieDataSet_rec.setColors(ColorTemplate.MATERIAL_COLORS);
-                                    pieDataSet_death.setColors(ColorTemplate.MATERIAL_COLORS);
-                                    PieData data = new PieData(pieDataSet);
-                                    PieData data_rec = new PieData(pieDataSet_rec);
-                                    PieData data_death = new PieData(pieDataSet_death);
-                                    data.setValueTextSize(0f);
-                                    data_rec.setValueTextSize(0f);
-                                    data_death.setValueTextSize(0f);
-                                    pieChart.setData(data);
-                                    pieChart_rec.setData(data_rec);
-                                    pieChart_death.setData(data_death);
-                                    MyMarkerView mv = new MyMarkerView(getApplicationContext(), R.layout.marker_layout);
-                                    MyMarkerView mv_rec = new MyMarkerView(getApplicationContext(), R.layout.marker_layout);
-                                    MyMarkerView mv_death = new MyMarkerView(getApplicationContext(), R.layout.marker_layout);
-                                    pieChart.setMarker(mv);
-                                    pieChart_rec.setMarker(mv_rec);
-                                    pieChart_death.setMarker(mv_death);
-                                    pieChart.invalidate();
-                                    pieChart_rec.invalidate();
-                                    pieChart_death.invalidate();
-                                    Loading.dissmiss();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                if (response.isSuccessful()) {
+                    final String myresponse = response.body().string();
+                    home.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                JSONArray jsonArray = new JSONArray(myresponse);
+                                pieChart = findViewById(R.id.piechartConfirm);
+                                pieChart_rec = findViewById(R.id.piechartrecover);
+                                pieChart_death = findViewById(R.id.piechartDeath);
+                                pieChart = setPieProperty(pieChart);
+                                pieChart_rec = setPieProperty(pieChart_rec);
+                                pieChart_death = setPieProperty(pieChart_death);
+                                //                        pieChart.setExtraOffsets(5,10,5,5);
+                                ArrayList<PieEntry> pieEntries = new ArrayList<>();
+                                ArrayList<PieEntry> pieEntries_rec = new ArrayList<>();
+                                ArrayList<PieEntry> pieEntries_death = new ArrayList<>();
+                                for (int i = 0; i < jsonArray.length() - 1; i++) {
+                                    JSONObject json = jsonArray.getJSONObject(i);
+                                    pieEntries.add(new PieEntry(Float.parseFloat(json.getString("Total Confirmed")), json.getString("STATE/UT")));
+                                    pieEntries_rec.add(new PieEntry(Float.parseFloat(json.getString("Total Recovered")), json.getString("STATE/UT")));
+                                    pieEntries_death.add(new PieEntry(Float.parseFloat(json.getString("Total Death")), json.getString("STATE/UT")));
                                 }
+                                PieDataSet pieDataSet = new PieDataSet(pieEntries, "Confirmed cases in India");
+                                PieDataSet pieDataSet_rec = new PieDataSet(pieEntries_rec, "Recovered cases in India");
+                                PieDataSet pieDataSet_death = new PieDataSet(pieEntries_death, "Deceased cases in India");
+                                pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                                pieDataSet_rec.setColors(ColorTemplate.MATERIAL_COLORS);
+                                pieDataSet_death.setColors(ColorTemplate.MATERIAL_COLORS);
+                                PieData data = new PieData(pieDataSet);
+                                PieData data_rec = new PieData(pieDataSet_rec);
+                                PieData data_death = new PieData(pieDataSet_death);
+                                data.setValueTextSize(0f);
+                                data_rec.setValueTextSize(0f);
+                                data_death.setValueTextSize(0f);
+                                pieChart.setData(data);
+                                pieChart_rec.setData(data_rec);
+                                pieChart_death.setData(data_death);
+                                MyMarkerView mv = new MyMarkerView(getApplicationContext(), R.layout.marker_layout);
+                                MyMarkerView mv_rec = new MyMarkerView(getApplicationContext(), R.layout.marker_layout);
+                                MyMarkerView mv_death = new MyMarkerView(getApplicationContext(), R.layout.marker_layout);
+                                pieChart.setMarker(mv);
+                                pieChart_rec.setMarker(mv_rec);
+                                pieChart_death.setMarker(mv_death);
+                                pieChart.invalidate();
+                                pieChart_rec.invalidate();
+                                pieChart_death.invalidate();
+                                Loading.dissmiss();
+                                swipeContainer.setRefreshing(false);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        });
+                        }
+                    });
 
-                    } else {
-                        Log.i("msg4", "Failed");
-                    }
+                } else {
+                    Toast.makeText(getApplicationContext(),"Oops! Can't connect to server",Toast.LENGTH_LONG).show();
+                    Loading.dissmiss();
+                }
             }
         });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        DoNetworkTask();
+        swipeContainer=findViewById(R.id.swipeView);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                DoNetworkTask();
+
+            }
+        });
+
     }
 
     @Override
