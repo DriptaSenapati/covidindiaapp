@@ -71,7 +71,7 @@ public class home extends AppCompatActivity implements NavigationView.OnNavigati
         fragment=new home_activity(home.this);
         fm=getSupportFragmentManager();
         ft = fm.beginTransaction();
-        ft.replace(R.id.simpleframelayout,fragment);
+        ft.replace(R.id.simpleframelayout,fragment,"HOME_FRAGMENT");
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
 
@@ -89,6 +89,37 @@ public class home extends AppCompatActivity implements NavigationView.OnNavigati
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        fm=getSupportFragmentManager();
+        ft = fm.beginTransaction();
+        switch (item.getItemId()){
+            case R.id.data:
+                fragment=fm.findFragmentByTag("HOME_DATA");
+                if(fragment == null){
+                    fragment = new data_activity();
+                    drawerLayout.closeDrawers();
+                    ft.replace(R.id.simpleframelayout,fragment,"HOME_DATA");
+                }else{
+                    drawerLayout.closeDrawers();
+                }
+                break;
+            case R.id.home:
+                fragment=fm.findFragmentByTag("HOME_FRAGMENT");
+                if (fragment == null){
+                    fragment=new home_activity(home.this);
+                    drawerLayout.closeDrawers();
+                    ft.replace(R.id.simpleframelayout,fragment,"HOME_FRAGMENT");
+                }else{
+                    drawerLayout.closeDrawers();
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + item.getItemId());
+        }
+
+
+
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
         return true;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.covidindia;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -8,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -41,11 +44,15 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class home_activity extends Fragment {
+    MathJaxWebView mathJaxWebView,highdeathwebview,highrecratewebview;
+    String tex= "$$\\Tiny T = \\frac{TotalTested}{Population} \\times 100$$";
+    String tex_highdeath= "$$\\Tiny T = \\frac{Deceased}{Confirmed} \\times 100$$";
+    String tex_highrec= "$$\\Tiny T = \\frac{Recovered}{Confirmed} \\times 100$$";
     Activity myactivity;
     protected String URL = "https://covserver.pythonanywhere.com/";
     PieChart pieChart,pieChart_rec,pieChart_death;
     TextView confirmtext,recovertext,activetext,deathtext,dash_date,confirmcarddatatext,recovercarddatatext,deathcarddatatext,uptext,uptextrec,
-    uptextdeath,uptextactive;
+    uptextdeath,uptextactive,fratiodata,highdeathratedata,highrecratedata,highconspikedata,highrecspikedata,highdeathspikedata;
     private SwipeRefreshLayout swipeContainer;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -96,6 +103,7 @@ public class home_activity extends Fragment {
                 if (response.isSuccessful()){
                     final String myresponse = response.body().string();
                     myactivity.runOnUiThread(new Runnable() {
+                        @SuppressLint("SetTextI18n")
                         @Override
                         public void run() {
                             try {
@@ -112,6 +120,12 @@ public class home_activity extends Fragment {
                                 uptextrec.setText(jsonObject.getString("up_text_recover"));
                                 uptextactive.setText(jsonObject.getString("up_text_active"));
                                 uptextdeath.setText(jsonObject.getString("up_text_death"));
+                                fratiodata.setText(jsonObject.getString("number_high_conftest")+" in " + jsonObject.getString("state_high_conftest"));
+                                highdeathratedata.setText(jsonObject.getString("number_high_deathrate")+" in "+jsonObject.getString("state_high_deathrate"));
+                                highrecratedata.setText(jsonObject.getString("number_high_recoverrate")+" in "+jsonObject.getString("state_high_recoverrate"));
+                                highconspikedata.setText(jsonObject.getString("high_occur")+" in "+jsonObject.getString("high_occur_date"));
+                                highrecspikedata.setText(jsonObject.getString("high_occur_rec")+" in "+jsonObject.getString("high_occur_date_rec"));
+                                highdeathspikedata.setText(jsonObject.getString("high_occur_death")+" in "+jsonObject.getString("high_occur_death_date"));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -157,7 +171,7 @@ public class home_activity extends Fragment {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    final String myresponse = response.body().string();
+                    final String myresponse = Objects.requireNonNull(response.body()).string();
                     myactivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -225,6 +239,7 @@ public class home_activity extends Fragment {
 
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -246,6 +261,21 @@ public class home_activity extends Fragment {
         pieChart = view.findViewById(R.id.piechartConfirm);
         pieChart_rec = view.findViewById(R.id.piechartrecover);
         pieChart_death = view.findViewById(R.id.piechartDeath);
+        fratiodata=view.findViewById(R.id.fratiodata);
+        highdeathratedata=view.findViewById(R.id.highdeathratedata);
+        highrecratedata=view.findViewById(R.id.highrecratedata);
+        highconspikedata=view.findViewById(R.id.highconspikedata);
+        highrecspikedata=view.findViewById(R.id.highrecspikedata);
+        highdeathspikedata=view.findViewById(R.id.highdeathspikedata);
+        mathJaxWebView =(MathJaxWebView)view.findViewById(R.id.webviewFration);
+        highdeathwebview=(MathJaxWebView)view.findViewById(R.id.highdeathwebview);
+        highrecratewebview=(MathJaxWebView)view.findViewById(R.id.highrecratewebview);
+        mathJaxWebView.getSettings().setJavaScriptEnabled(true);
+        highdeathwebview.getSettings().setJavaScriptEnabled(true);
+        highrecratewebview.getSettings().setJavaScriptEnabled(true);
+        mathJaxWebView.setText(tex);
+        highdeathwebview.setText(tex_highdeath);
+        highrecratewebview.setText(tex_highrec);
         DoNetworkTask();
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
