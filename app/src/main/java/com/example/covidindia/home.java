@@ -95,7 +95,7 @@ public class home extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.data:
                 fragment=fm.findFragmentByTag("HOME_DATA");
                 if(fragment == null){
-                    fragment = new data_activity();
+                    fragment = new data_activity(home.this);
                     drawerLayout.closeDrawers();
                     ft.replace(R.id.simpleframelayout,fragment,"HOME_DATA");
                 }else{

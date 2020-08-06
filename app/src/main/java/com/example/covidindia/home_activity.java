@@ -223,8 +223,14 @@ public class home_activity extends Fragment {
                     });
 
                 } else {
-                    Toast.makeText(myactivity,"Oops! Can't connect to server",Toast.LENGTH_LONG).show();
-                    Loading.dissmiss();
+                    myactivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(myactivity,"Oops! Can't connect to server",Toast.LENGTH_LONG).show();
+                            Loading.dissmiss();
+                        }
+                    });
+
                 }
             }
         });
