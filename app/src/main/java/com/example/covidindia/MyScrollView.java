@@ -10,7 +10,7 @@ public class MyScrollView extends ScrollView {
 
     public interface ScrollViewListener {
 
-        void onScrollChanged(MyScrollView scrollView,int x, int y, int oldx, int oldy);
+        void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy);
 
     }
 

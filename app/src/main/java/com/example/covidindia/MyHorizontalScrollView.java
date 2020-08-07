@@ -9,7 +9,7 @@ class MyHorizontalScrollView extends HorizontalScrollView {
     private ScrollViewListener scrollViewListener = null;
     public interface ScrollViewListener {
 
-        void onScrollChanged(MyHorizontalScrollView HorizonscrollView,int x, int y, int oldx, int oldy);
+        void onScrollChanged(MyHorizontalScrollView HorizonscrollView, int x, int y, int oldx, int oldy);
 
     }
     public MyHorizontalScrollView(Context context) {

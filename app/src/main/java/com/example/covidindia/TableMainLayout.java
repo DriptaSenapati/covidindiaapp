@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TableMainLayout extends RelativeLayout implements MyHorizontalScrollView.ScrollViewListener, MyScrollView.ScrollViewListener{
+public class TableMainLayout extends RelativeLayout{
     Context context;
     RelativeLayout relativeLayout;
     JSONArray data;
@@ -331,24 +331,4 @@ public class TableMainLayout extends RelativeLayout implements MyHorizontalScrol
         return headerTextView;
     }
 
-
-    @Override
-    public void onScrollChanged(MyHorizontalScrollView HorizonscrollView, int x, int y, int oldx, int oldy) {
-        if(HorizonscrollView == horizontalScrollViewB){
-            horizontalScrollViewD.scrollTo(x,y);
-        }
-        else if(HorizonscrollView == horizontalScrollViewD){
-            horizontalScrollViewB.scrollTo(x, y);
-        }
-    }
-
-    @Override
-    public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
-        if(scrollView == scrollViewC){
-            scrollViewD.scrollTo(x,y);
-        }
-        else if(scrollView == scrollViewD){
-            scrollViewC.scrollTo(x,y);
-        }
-    }
 }
