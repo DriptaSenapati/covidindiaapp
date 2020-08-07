@@ -292,6 +292,13 @@ public class data_activity extends Fragment {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     e.printStackTrace();
+                    dataactivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(dataactivity,"Oops! Can't connect to the server",Toast.LENGTH_LONG).show();
+                            Loading.dissmiss();
+                        }
+                    });
                 }
 
                 @Override
@@ -312,14 +319,23 @@ public class data_activity extends Fragment {
                                     Loading.dissmiss();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                    Toast.makeText(dataactivity,"Exception Occured during connecting to server",Toast.LENGTH_LONG);
-                                    Loading.dissmiss();
+                                    dataactivity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Loading.dissmiss();
+                                        }
+                                    });
                                 }
                             }
                         });
                     }else {
-                        Toast.makeText(dataactivity,"Oops! Can't connect to the server",Toast.LENGTH_LONG).show();
-                        Loading.dissmiss();
+                        dataactivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(dataactivity,"No data found!",Toast.LENGTH_LONG).show();
+                                Loading.dissmiss();
+                            }
+                        });
                     }
                 }
             });
