@@ -3,33 +3,33 @@ package com.example.covidindia;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -50,6 +50,8 @@ public class data_activity extends Fragment {
     EditText date_data;
     public Boolean BIAS_ADJUST = false;
     String datestart,dateend;
+    Button btn_data_submit;
+    RelativeLayout tablerelative;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -136,7 +138,7 @@ public class data_activity extends Fragment {
                     String selectedstate= adapterView.getSelectedItem().toString();
                     Log.i("msg",selectedstate);
                     if (!selectedstate.equals("All")){
-                        districtspinner.setVisibility(View.VISIBLE);
+
                         if (BIAS_ADJUST == false){
                             setMarginLeft(adapterView,0.153f);
                             BIAS_ADJUST = true;
@@ -220,6 +222,7 @@ public class data_activity extends Fragment {
                                 }
                             }
                         });
+                        districtspinner.setVisibility(View.VISIBLE);
                     }else{
                         if (districtspinner.getVisibility() == View.VISIBLE){
                             districtspinner.setVisibility(View.INVISIBLE);
@@ -246,7 +249,81 @@ public class data_activity extends Fragment {
                 showCalenderDialog(datestart, dateend);
             }
         });
+        btn_data_submit = view.findViewById(R.id.btn_data_submit);
+        btn_data_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getJsonData(view);
+            }
+        });
+        tablerelative= view.findViewById(R.id.table_contain_layout);
         return  view;
+    }
+
+    private void getJsonData(final View view) {
+        String district;
+        if (statespinner.getSelectedItem() == null || dailyspinner.getSelectedItem() == null){
+            Toast.makeText(dataactivity,"Please fill up the state or daily field",Toast.LENGTH_LONG).show();
+        }else if (districtspinner.getSelectedItem() == null && !statespinner.getSelectedItem().toString().equals("All")){
+            Toast.makeText(dataactivity,"Provide district name",Toast.LENGTH_LONG).show();
+        }else{
+            final loading Loading = new loading(dataactivity);
+            Loading.startLoading();
+            String state = statespinner.getSelectedItem().toString();
+            if (!state.equals("All")){
+                district = districtspinner.getSelectedItem().toString();
+            }else{
+                district = "none";
+            }
+            String date = ((date_data.getText().toString().matches("")) ? "All" : date_data.getText().toString());
+            String daily = dailyspinner.getSelectedItem().toString();
+            OkHttpClient client = new OkHttpClient();
+            RequestBody formBody = new FormBody.Builder()
+                    .add("state_data",state)
+                    .add("district_data",district)
+                    .add("date_data",date)
+                    .add("daily_data",daily)
+                    .build();
+            final Request request = new Request.Builder()
+                    .url(URL+"State")
+                    .post(formBody)
+                    .build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    if (response.isSuccessful()){
+                        final String myresponse = response.body().string();
+                        dataactivity.runOnUiThread(new Runnable() {
+                            @RequiresApi(api = Build.VERSION_CODES.M)
+                            @Override
+                            public void run() {
+                                try {
+                                    JSONArray jsonArray = new JSONArray(myresponse);
+                                    int ChildCount = tablerelative.getChildCount();
+                                    Log.i("childb", String.valueOf(tablerelative.getChildCount()));
+                                    tablerelative.removeAllViews();
+                                    Log.i("child", String.valueOf(tablerelative.getChildCount()));
+                                    TableMainLayout tableMainLayout = new TableMainLayout(dataactivity,tablerelative,jsonArray);
+                                    Loading.dissmiss();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(dataactivity,"Exception Occured during connecting to server",Toast.LENGTH_LONG);
+                                    Loading.dissmiss();
+                                }
+                            }
+                        });
+                    }else {
+                        Toast.makeText(dataactivity,"Oops! Can't connect to the server",Toast.LENGTH_LONG).show();
+                        Loading.dissmiss();
+                    }
+                }
+            });
+        }
     }
 
 }
