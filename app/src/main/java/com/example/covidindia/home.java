@@ -112,6 +112,17 @@ public class home extends AppCompatActivity implements NavigationView.OnNavigati
                     drawerLayout.closeDrawers();
                 }
                 break;
+
+            case R.id.demography:
+                fragment=fm.findFragmentByTag("DEMOGRAPHY_FRAGMENT");
+                if (fragment == null){
+                    fragment = new demo_activity(home.this);
+                    drawerLayout.closeDrawers();
+                    ft.replace(R.id.simpleframelayout,fragment,"DEMOGRAPHY_FRAGMENT");
+                }else{
+                    drawerLayout.closeDrawers();
+                }
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }

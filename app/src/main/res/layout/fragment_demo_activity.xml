@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swiperefreshdemo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/swiperefresh">
-
-    <!-- TODO: Update blank fragment layout -->
+    tools:context=".demo_activity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:id="@+id/nestedScroll"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,46 +18,51 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/data_caption"
-                android:layout_width="match_parent"
+                android:id="@+id/demo_heading"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="30dp"
                 android:fontFamily="@font/baloo"
-                android:gravity="center"
-                android:text="Data"
+                android:text="@string/demography_section"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
-                android:id="@+id/state_spinner"
-                android:layout_width="150dp"
+                android:id="@+id/state_spinner_demo"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:autofillHints="Select State"
-                android:backgroundTint="#7d918c"
-                android:popupBackground="#e6eef2"
-                android:textAlignment="center"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/data_caption" />
+                app:layout_constraintTop_toBottomOf="@+id/demo_heading" />
 
             <Spinner
-                android:id="@+id/district_spinner"
-                android:layout_width="150dp"
+                android:id="@+id/district_spinner_demo"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:backgroundTint="#7d918c"
-                android:popupBackground="#e6eef2"
+                android:layout_marginTop="10dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.9"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/data_caption" />
+                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintStart_toEndOf="@+id/state_spinner_demo"
+                app:layout_constraintTop_toBottomOf="@+id/demo_heading" />
+
+            <Spinner
+                android:id="@+id/city_spinner_demo"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintStart_toEndOf="@+id/district_spinner_demo"
+                app:layout_constraintTop_toBottomOf="@+id/demo_heading" />
 
             <EditText
-                android:id="@+id/date_data"
+                android:id="@+id/date_data_demo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="140dp"
@@ -66,30 +70,19 @@
                 android:drawablePadding="5dp"
                 android:focusable="true"
                 android:gravity="center"
-                android:hint="dd/mm/yyyy"
+                android:hint="@string/dd_mm_yyyy"
                 android:padding="10dp"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.17"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Spinner
-                android:id="@+id/daily_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="140dp"
-                android:padding="7dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.88"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/btn_data_submit"
+                android:id="@+id/btn_data_submit_demo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="200dp"
+                android:layout_marginTop="210dp"
                 android:background="@drawable/btn_style"
                 android:elevation="5dp"
                 android:fontFamily="@font/acme"
@@ -103,14 +96,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
                 android:layout_margin="10dp"
-                android:layout_marginBottom="50dp"
                 android:paddingBottom="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_data_submit">
+                app:layout_constraintTop_toBottomOf="@+id/btn_data_submit_demo">
 
                 <RelativeLayout
-                    android:id="@+id/table_contain_layout"
+                    android:id="@+id/table_contain_layout_demo"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerHorizontal="true"
@@ -119,13 +111,10 @@
 
 
                 </RelativeLayout>
-
-
             </RelativeLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </androidx.core.widget.NestedScrollView>
+
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

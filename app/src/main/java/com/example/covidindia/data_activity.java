@@ -1,5 +1,6 @@
 package com.example.covidindia;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,7 +23,9 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -89,7 +93,7 @@ public class data_activity extends Fragment {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        String date= i2+"/"+i1+"/"+i;
+                        String date= i2+"/"+(i1+1)+"/"+i;
                         date_data.setText(date);
                     }
                 },
@@ -249,6 +253,7 @@ public class data_activity extends Fragment {
                 showCalenderDialog(datestart, dateend);
             }
         });
+        final NestedScrollView scroll = view.findViewById(R.id.nestedScroll);
         btn_data_submit = view.findViewById(R.id.btn_data_submit);
         btn_data_submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -257,6 +262,14 @@ public class data_activity extends Fragment {
             }
         });
         tablerelative= view.findViewById(R.id.table_contain_layout);
+        final SwipeRefreshLayout swipeContainer = view.findViewById(R.id.swiperefresh);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getActivity().getSupportFragmentManager().beginTransaction().detach(data_activity.this).attach(data_activity.this).commit();
+                swipeContainer.setRefreshing(false);
+            }
+        });
         return  view;
     }
 

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
@@ -277,6 +278,7 @@ public class TableMainLayout extends RelativeLayout{
         this.scrollViewD.setId(4);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initializeTable() {
         this.tableA = new TableLayout(this.context);
@@ -288,7 +290,9 @@ public class TableMainLayout extends RelativeLayout{
         this.horizontalScrollViewB = new MyHorizontalScrollView(this.context);
         this.horizontalScrollViewD = new MyHorizontalScrollView(this.context);
         this.scrollViewC = new MyScrollView(this.context);
+        this.scrollViewC.setNestedScrollingEnabled(true);
         this.scrollViewD = new MyScrollView(this.context);
+        this.scrollViewD.setNestedScrollingEnabled(true);
         this.horizontalScrollViewD.setOnScrollChangeListener(new OnScrollChangeListener() {
             @Override
             public void onScrollChange(View view, int i, int i1, int i2, int i3) {
