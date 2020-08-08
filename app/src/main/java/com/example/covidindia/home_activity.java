@@ -46,8 +46,8 @@ import okhttp3.Response;
 public class home_activity extends Fragment {
     MathJaxWebView mathJaxWebView,highdeathwebview,highrecratewebview;
     String tex= "$$\\Tiny T = \\frac{TotalTested}{Population} \\times 100$$";
-    String tex_highdeath= "$$\\Tiny T = \\frac{Deceased}{Confirmed} \\times 100$$";
-    String tex_highrec= "$$\\Tiny T = \\frac{Recovered}{Confirmed} \\times 100$$";
+    String tex_highdeath= "$$\\Tiny D = \\frac{Deceased}{Confirmed} \\times 100$$";
+    String tex_highrec= "$$\\Tiny R = \\frac{Recovered}{Confirmed} \\times 100$$";
     Activity myactivity;
     protected String URL = "https://covserver.pythonanywhere.com/";
     PieChart pieChart,pieChart_rec,pieChart_death;
