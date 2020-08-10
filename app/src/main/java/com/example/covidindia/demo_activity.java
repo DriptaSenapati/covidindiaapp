@@ -277,6 +277,7 @@ public class demo_activity extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.simpleframelayout,new demo_activity(getActivity()),"DEMOGRAPHY_FRAGMENT").commit();
                 swipeContainer.setRefreshing(false);
             }
         });

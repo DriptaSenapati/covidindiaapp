@@ -266,7 +266,7 @@ public class data_activity extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getActivity().getSupportFragmentManager().beginTransaction().detach(data_activity.this).attach(data_activity.this).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.simpleframelayout,new data_activity(getActivity()),"HOME_DATA").commit();
                 swipeContainer.setRefreshing(false);
             }
         });
