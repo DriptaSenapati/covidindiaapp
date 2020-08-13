@@ -14,6 +14,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
@@ -69,6 +71,7 @@ public class demo_activity extends Fragment {
     Button get_data;
     RelativeLayout tablelayout;
     JSONArray data;
+    RecyclerView recyclerdata;
 
     public demo_activity(Activity activity) {
         // Required empty public constructor
@@ -101,10 +104,9 @@ public class demo_activity extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_demo_activity, container, false);
         state_spinner =view.findViewById(R.id.state_spinner_demo);
-        tablelayout = view.findViewById(R.id.table_contain_layout_demo);
         district_spinner = view.findViewById(R.id.district_spinner_demo);
         city_spinner = view.findViewById(R.id.city_spinner_demo);
-        ArrayAdapter<String> stateadapter= new ArrayAdapter<>(demoactivity,R.layout.spinner_style,getResources().getStringArray(R.array.data_state_demo));
+        ArrayAdapter<String> stateadapter= new ArrayAdapter<>(demoactivity,R.layout.spinner_style,getResources().getStringArray(R.array.data_state));
         state_spinner.setAdapter(stateadapter);
         setDefaultSpinnername(state_spinner,stateadapter,R.layout.deafaultnamespinner,demoactivity);
         state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -150,6 +152,7 @@ public class demo_activity extends Fragment {
                                             try {
                                                 JSONArray list = new JSONArray(myresponse);
                                                 ArrayList<String> dis_name = new ArrayList<>();
+                                                dis_name.add("All");
                                                 for (int i=0;i<list.length();i++){
                                                     dis_name.add(list.getString(i));
                                                 }
@@ -273,6 +276,7 @@ public class demo_activity extends Fragment {
                 getjsonData();
             }
         });
+        recyclerdata = view.findViewById(R.id.demo_recycler);
         final SwipeRefreshLayout swipeContainer = view.findViewById(R.id.swiperefreshdemo);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -370,13 +374,10 @@ public class demo_activity extends Fragment {
         @Override
         protected void onPostExecute(JSONArray array) {
             if (array != null){
-                try {
-                    tablelayout.removeAllViews();
-                    new TableMainLayout(demoactivity,tablelayout,array);
-                    Loading.dissmiss();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                RecyclerAdapter recyclerAdapter = new RecyclerAdapter(demoactivity,array);
+                recyclerdata.setAdapter(recyclerAdapter);
+                recyclerdata.setLayoutManager(new LinearLayoutManager(demoactivity));
+                Loading.dissmiss();
             }else{
                 Toast.makeText(demoactivity,"Data not found!",Toast.LENGTH_LONG).show();
                 Loading.dissmiss();

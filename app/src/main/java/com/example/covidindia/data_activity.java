@@ -25,6 +25,8 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +57,7 @@ public class data_activity extends Fragment {
     public Boolean BIAS_ADJUST = false;
     String datestart,dateend;
     Button btn_data_submit;
-    RelativeLayout tablerelative;
+    RecyclerView recyclerdata;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -253,7 +255,6 @@ public class data_activity extends Fragment {
                 showCalenderDialog(datestart, dateend);
             }
         });
-        final NestedScrollView scroll = view.findViewById(R.id.nestedScroll);
         btn_data_submit = view.findViewById(R.id.btn_data_submit);
         btn_data_submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,7 +262,7 @@ public class data_activity extends Fragment {
                 getJsonData(view);
             }
         });
-        tablerelative= view.findViewById(R.id.table_contain_layout);
+        recyclerdata = view.findViewById(R.id.reclylerdata);
         final SwipeRefreshLayout swipeContainer = view.findViewById(R.id.swiperefresh);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -324,11 +325,13 @@ public class data_activity extends Fragment {
                             public void run() {
                                 try {
                                     JSONArray jsonArray = new JSONArray(myresponse);
-                                    int ChildCount = tablerelative.getChildCount();
-                                    Log.i("childb", String.valueOf(tablerelative.getChildCount()));
-                                    tablerelative.removeAllViews();
-                                    Log.i("child", String.valueOf(tablerelative.getChildCount()));
-                                    TableMainLayout tableMainLayout = new TableMainLayout(dataactivity,tablerelative,jsonArray);
+//                                    int ChildCount = tablerelative.getChildCount();
+//                                    Log.i("childb", String.valueOf(tablerelative.getChildCount()));
+//                                    tablerelative.removeAllViews();
+//                                    Log.i("child", String.valueOf(tablerelative.getChildCount()));
+                                    RecyclerAdapter recyclerAdapter = new RecyclerAdapter(dataactivity,jsonArray);
+                                    recyclerdata.setAdapter(recyclerAdapter);
+                                    recyclerdata.setLayoutManager(new LinearLayoutManager(dataactivity));
                                     Loading.dissmiss();
                                 } catch (JSONException e) {
                                     e.printStackTrace();

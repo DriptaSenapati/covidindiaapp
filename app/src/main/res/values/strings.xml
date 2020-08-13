@@ -43,41 +43,7 @@
         <item>Andaman and Nicobar Islands</item>
 
     </string-array>
-    <string-array name="data_state_demo">
-        <item>West Bengal</item>
-        <item>Uttarakhand</item>
-        <item>Uttar Pradesh</item>
-        <item>Tripura</item>
-        <item>Telangana</item>
-        <item>Tamil Nadu</item>
-        <item>Rajasthan</item>
-        <item>Punjab</item>
-        <item>Puducherry</item>
-        <item>Odisha</item>
-        <item>Mizoram</item>
-        <item>Meghalaya</item>
-        <item>Manipur</item>
-        <item>Maharashtra</item>
-        <item>Madhya Pradesh</item>
-        <item>Ladakh</item>
-        <item>Kerala</item>
-        <item>Karnataka</item>
-        <item>Jharkhand</item>
-        <item>Jammu and Kashmir</item>
-        <item>Himachal Pradesh</item>
-        <item>Haryana</item>
-        <item>Gujarat</item>
-        <item>Goa</item>
-        <item>Delhi</item>
-        <item>Chhattisgarh</item>
-        <item>Chandigarh</item>
-        <item>Bihar</item>
-        <item>Assam</item>
-        <item>Arunachal Pradesh</item>
-        <item>Andhra Pradesh</item>
-        <item>Andaman and Nicobar Islands</item>
 
-    </string-array>
     <string-array name="daily_name">
         <item>Yes</item>
         <item>No</item>
