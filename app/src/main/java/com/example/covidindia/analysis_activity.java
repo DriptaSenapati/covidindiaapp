@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +34,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.judemanutd.katexview.KatexView;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -105,6 +105,14 @@ public class analysis_activity extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        final SwipeRefreshLayout swipeContainer = view.findViewById(R.id.swiperefreshanalysis);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.simpleframelayout,new analysis_activity(getActivity()),"ANALYSIS_FRAGMENT").commit();
+                swipeContainer.setRefreshing(false);
+            }
+        });
         return view;
     }
 
@@ -406,6 +414,7 @@ public class analysis_activity extends Fragment {
                                 myChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
                                 MarkerviewChart mv = new MarkerviewChart(analysisactivity,R.layout.marker_layout,Xval,"bar");
                                 myChart.setMarker(mv);
+                                myChart.getAxisLeft().setAxisMinimum(0f);
                                 myChart.animateXY(700,800);
                                 myChart.getXAxis().setLabelRotationAngle(-30);
                                 myChart.getAxisRight().setEnabled(false);
