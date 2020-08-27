@@ -123,6 +123,16 @@ public class home extends AppCompatActivity implements NavigationView.OnNavigati
                     drawerLayout.closeDrawers();
                 }
                 break;
+            case R.id.analysis:
+                fragment = fm.findFragmentByTag("ANALYSIS_FRAGMENT");
+                if (fragment == null){
+                    fragment = new analysis_activity(home.this);
+                    drawerLayout.closeDrawers();
+                    ft.replace(R.id.simpleframelayout,fragment,"ANALYSIS_FRAGMENT");
+                }else{
+                    drawerLayout.closeDrawers();
+                }
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }

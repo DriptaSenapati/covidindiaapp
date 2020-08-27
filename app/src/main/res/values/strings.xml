@@ -7,6 +7,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="demography_section">Demography Section</string>
     <string name="dd_mm_yyyy">dd/mm/yyyy</string>
+    <string name="graph_section_by_state">Graph section by State</string>
+    <string name="ratio_bar_caption_1">Here \'Confirmed to Test Ratio\'(F) is evaluated for each state and is then arranged in descending order. After that a bar graph is plotted. This will actually help us to get an insight into the infection situation of each state.</string>
+    <string name="radio_bar_chart_caption_2">Besides that a total tested count has also been collected and been sorted as descending order. Since only sorting the total tested report by count can\'t reveal any right information because tested count depends on the population of that state. So, we take ratio totaltested to corresponding population(say,T).</string>
+    <string name="rec_rate_chart_caption">Here Recovery rate(R) for all states are sorted in descending order and a horizontal bar graph is plotted</string>
+    <string name="dec_rate_chart_caption">Here Deceased rate(D) for all states are sorted in descending order and a horizontal bar graph is plotted</string>
+    <string name="age_chart_caption">Here all patient\'s ages are grouped in interval of 10 and a bar graph is plotted to see which age group is more prone to Corona Virus affection. Due to having lots of data, a sample of 1000 is taken.</string>
     <string-array name="data_state">
         <item>All</item>
         <item>West Bengal</item>
@@ -47,5 +53,11 @@
     <string-array name="daily_name">
         <item>Yes</item>
         <item>No</item>
+    </string-array>
+    <string-array name="condition_name">
+        <item>Together</item>
+        <item>Confirmed</item>
+        <item>Recovered</item>
+        <item>Deceased</item>
     </string-array>
 </resources>

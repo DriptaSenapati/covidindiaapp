@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swiperefreshanalysis"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".analysis_activity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/state_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/baloo"
+                android:text="@string/graph_section_by_state"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/state_graph_state_list"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/state_heading" />
+
+            <TextView
+                android:id="@+id/state_graph_daily"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Daily(y/n):"
+                app:layout_constraintStart_toEndOf="@+id/state_graph_state_list"
+                app:layout_constraintTop_toBottomOf="@+id/state_heading" />
+
+            <Spinner
+                android:id="@+id/state_graph_daily_spinner"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toEndOf="@+id/state_graph_daily"
+                app:layout_constraintTop_toBottomOf="@+id/state_heading" />
+
+            <TextView
+                android:id="@+id/state_graph_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="108dp"
+                android:layout_marginTop="30dp"
+                android:text="Condition:"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/state_graph_daily" />
+
+            <Spinner
+                android:id="@+id/state_graph_condition_spinner"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="28dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.186"
+                app:layout_constraintStart_toEndOf="@+id/state_graph_condition"
+                app:layout_constraintTop_toBottomOf="@+id/state_graph_daily" />
+
+            <TextView
+                android:id="@+id/seekbar_caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Move the below slider to see the last days"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/state_graph_condition" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/chart_graph_seekbar"
+                android:layout_width="250dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:max="60"
+                android:min="0"
+                android:thumbTint="#3886c9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seekbar_caption" />
+
+            <TextView
+                android:id="@+id/chart_graph_seekbar_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:text="0"
+                app:layout_constraintStart_toEndOf="@+id/chart_graph_seekbar"
+                app:layout_constraintTop_toBottomOf="@+id/seekbar_caption" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chart_graph_seekbar"
+                android:id="@+id/chart_graph_card">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ProgressBar
+                        android:id="@+id/chart_graph_load"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:indeterminateDrawable="@drawable/animated_load"
+                        android:indeterminateTint="@color/colorstatus" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/state_linechart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comparative study of confirmed to test ratio for all states"
+                app:layout_constraintTop_toBottomOf="@+id/chart_graph_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="30dp"
+                android:id="@+id/ratio_bar_chart_heading"
+                android:fontFamily="@font/baloo"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ratio_bar_caption_1"
+                app:layout_constraintTop_toBottomOf="@id/ratio_bar_chart_heading"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:id="@+id/ratio_bar_chart_caption_text1"/>
+
+            <com.example.covidindia.MathJaxWebView
+                android:id="@+id/radio_bar_chart_caption_1_formula"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/ratio_bar_chart_caption_text1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radio_bar_chart_caption_2"
+                app:layout_constraintTop_toBottomOf="@+id/radio_bar_chart_caption_1_formula"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:id="@+id/radio_bar_chart_caption_text2"/>
+            <com.example.covidindia.MathJaxWebView
+                android:id="@+id/radio_bar_chart_caption_2_formula"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/radio_bar_chart_caption_text2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/radio_bar_chart_caption_2_formula"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:id="@+id/radiogrp">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="F-Ratio"
+                    android:checked="true"
+                    android:id="@+id/F-ratio"
+                    android:backgroundTint="#f7edf7" />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tested Data"
+                    android:checked="true"
+                    android:id="@+id/testeddata"/>
+
+            </RadioGroup>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_margin="9dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radiogrp"
+                android:padding="25dp"
+                android:id="@+id/radio_bar_chart_card">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ProgressBar
+                        android:id="@+id/radio_bar_load"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:indeterminateDrawable="@drawable/animated_load"
+                        android:indeterminateTint="@color/colorstatus" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/radio_bar_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Situation of states in terms of Recovery rate"
+                app:layout_constraintTop_toBottomOf="@+id/radio_bar_chart_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/baloo"
+                android:textSize="17sp"
+                android:id="@+id/rec_rate_chart_heading"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/rec_rate_chart_heading"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/rec_rate_chart_caption"
+                android:id="@+id/rec_rate_chart_caption"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"/>
+            <com.example.covidindia.MathJaxWebView
+                android:id="@+id/rec_rate_chart_formula"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/rec_rate_chart_caption"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_margin="9dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rec_rate_chart_formula"
+                android:padding="25dp"
+                android:id="@+id/rec_rate_chart_card">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ProgressBar
+                        android:id="@+id/rec_rate_chart_load"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:indeterminateDrawable="@drawable/animated_load"
+                        android:indeterminateTint="@color/colorstatus" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/rec_rate_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Situation of states in terms of Deceased rate"
+                app:layout_constraintTop_toBottomOf="@+id/rec_rate_chart_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/baloo"
+                android:textSize="17sp"
+                android:id="@+id/dec_rate_chart_heading"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/dec_rate_chart_heading"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/dec_rate_chart_caption"
+                android:id="@+id/dec_rate_chart_caption"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"/>
+            <com.example.covidindia.MathJaxWebView
+                android:id="@+id/dec_rate_chart_formula"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/dec_rate_chart_caption"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_margin="9dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dec_rate_chart_formula"
+                android:padding="25dp"
+                android:id="@+id/dec_rate_chart_card">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ProgressBar
+                        android:id="@+id/dec_rate_chart_load"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:indeterminateDrawable="@drawable/animated_load"
+                        android:indeterminateTint="@color/colorstatus" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/dec_rate_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ages of Infected patients"
+                app:layout_constraintTop_toBottomOf="@+id/dec_rate_chart_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/baloo"
+                android:textSize="17sp"
+                android:id="@+id/age_chart_heading"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/age_chart_heading"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/age_chart_caption"
+                android:id="@+id/age_chart_caption"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_margin="9dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/age_chart_caption"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:padding="25dp"
+                android:id="@+id/age_chart_card">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ProgressBar
+                        android:id="@+id/age_chart_load"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:indeterminateDrawable="@drawable/animated_load"
+                        android:indeterminateTint="@color/colorstatus" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/age_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
