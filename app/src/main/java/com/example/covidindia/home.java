@@ -59,6 +59,7 @@ public class home extends AppCompatActivity implements NavigationView.OnNavigati
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_home);
         navigationView.bringToFront();
+        navigationView.setCheckedItem(R.id.home);
         navigationView.setNavigationItemSelectedListener(this);
         toolbar=findViewById(R.id.toolbar);
 
@@ -129,6 +130,16 @@ public class home extends AppCompatActivity implements NavigationView.OnNavigati
                     fragment = new analysis_activity(home.this);
                     drawerLayout.closeDrawers();
                     ft.replace(R.id.simpleframelayout,fragment,"ANALYSIS_FRAGMENT");
+                }else{
+                    drawerLayout.closeDrawers();
+                }
+                break;
+            case R.id.map:
+                fragment = fm.findFragmentByTag("MAP_FRAGMENT");
+                if (fragment == null){
+                    fragment = new map_activity(home.this);
+                    drawerLayout.closeDrawers();
+                    ft.replace(R.id.simpleframelayout,fragment,"MAP_FRAGMENT");
                 }else{
                     drawerLayout.closeDrawers();
                 }
